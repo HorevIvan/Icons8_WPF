@@ -25,5 +25,5 @@ public static class I8_Assembly
     public const string Company = "Icons8 LLC";
 
 
-    public const string Version = "0.1.0.0";
+    public const string Version = "0.2.0.0";
 }
