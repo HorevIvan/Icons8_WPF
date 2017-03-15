@@ -3,21 +3,57 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 
 namespace Icons8.UI
 {
-    public abstract class IconControl : UserControl
+    public abstract class IconBase : UserControl
     {
-        public virtual Image GetIconImage()
-        {
-            return (Image)VisualTreeHelper.GetChild(VisualTreeHelper.GetChild(VisualTreeHelper.GetChild(this, 0), 0), 0);
-        }
-
+        #region Image
+        
         private Image _Image;
 
-        public Image Image => _Image ?? (_Image = GetIconImage());
+        public Image Image => _Image ?? (_Image = GetImage());
+
+        public virtual Image GetImage()
+        {
+            return FindLogicalChildren<Image>(this).FirstOrDefault();
+        }
+
+        #endregion
+
+        public static IEnumerable<T> FindLogicalChildren<T>(DependencyObject dependencyObject) where T : DependencyObject
+        {
+            if(dependencyObject != null)
+            {
+                foreach(var rawChild in LogicalTreeHelper.GetChildren(dependencyObject))
+                {
+                    if(rawChild is DependencyObject)
+                    {
+                        var child = (DependencyObject)rawChild;
+
+                        if(child is T)
+                        {
+                            yield return (T)child;
+                        }
+                        else
+                        {
+                            foreach(T childOfChild in FindLogicalChildren<T>(child))
+                            {
+                                yield return childOfChild;
+                            }
+                        }
+                    }
+                    else
+                    {
+                    }
+                }
+            }
+        }
+
+        #region Drawings
 
         private Drawing[] _Drawings;
 
@@ -70,5 +106,7 @@ namespace Icons8.UI
 
             return drawings.ToArray();
         }
+        
+        #endregion
     }
 }

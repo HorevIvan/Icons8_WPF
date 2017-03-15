@@ -9,8 +9,12 @@ using System.Windows.Media;
 
 namespace Icons8.UI
 {
-    public abstract class MonochromeIconControl : IconControl
+    public abstract class MonochromeIcon : IconBase
     {
+        public static Color DefaultColor { get; } = Color.FromArgb(255, 69, 69, 69);
+
+        #region FillColor
+
         public virtual void FillColor(Color color)
         {
             foreach(var drawing in Drawings)
@@ -61,5 +65,7 @@ namespace Icons8.UI
                 return brush;
             }
         }
+
+        #endregion
     }
 }
